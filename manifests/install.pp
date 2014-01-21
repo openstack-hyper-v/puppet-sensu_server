@@ -40,25 +40,11 @@ class sensu_server::install {
   package {'curl':
     ensure => latest,
   }
-  vcsrepo{'/etc/sensu':
-    ensure   => latest,
-    provider => git,
-    source   => 'https://github.com/sensu/sensu-community-plugins.git',
-    require => File['/etc/sensu'],
-  }
-  file {'/etc/sensu/.gitignore':
-    ensure => file,
-    content => 'conf.d
-ssl',
-    require => [Vcsrepo['/etc/sensu'],File['/etc/sensu']]
-  }
-
   file {'/etc/sensu/ssl/cacert.pem':
     ensure => present,
     source => '/tmp/ssl_certs/sensu_ca/cacert.pem',
     require => [
       File['/etc/sensu/ssl'],
-      Vcsrepo['/etc/sensu'],
       Exec['create-sensu-certs']],
     owner => 'sensu',
     group => 'sensu',
@@ -69,7 +55,6 @@ ssl',
     source => '/tmp/ssl_certs/server/cert.pem',
     require => [
       File['/etc/sensu/ssl'],
-      Vcsrepo['/etc/sensu'],
       Exec['create-sensu-certs']],
     owner => 'sensu',
     group => 'sensu',
@@ -80,7 +65,6 @@ ssl',
     source => '/tmp/ssl_certs/server/key.pem',
     require => [
       File['/etc/sensu/ssl'],
-      Vcsrepo['/etc/sensu'],
       Exec['create-sensu-certs']],
     owner => 'sensu',
     group => 'sensu',
@@ -97,5 +81,9 @@ ssl',
     api                      => true,
     client                   => false,
 #    safe_mode => true,
+    require                  => [
+      Class['sensu_server::community_plugins'],
+      Service['rabbitmq-server','redis-server'],
+      Exec['create-sensu-certs']],
   }
 }

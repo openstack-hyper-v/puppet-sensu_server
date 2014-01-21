@@ -16,6 +16,7 @@ class sensu_server::rabbitmq_server {
     ssl_cacert        => '/etc/rabbitmq/ssl/cacert.pem',
     ssl_cert          => '/etc/rabbitmq/ssl/cert.pem',
     ssl_key           => '/etc/rabbitmq/ssl/key.pem',
+    require           => Exec['create-sensu-certs'],
   }
 
   rabbitmq_user{'sensu':
@@ -40,6 +41,7 @@ class sensu_server::rabbitmq_server {
     owner => 'sensu',
     group => 'sensu',
     mode  => '0644',
+    notify => Service['rabbitmq-server'],
   }
   file {'/etc/rabbitmq/ssl/cert.pem':
     ensure => present,
@@ -48,6 +50,7 @@ class sensu_server::rabbitmq_server {
     owner => 'sensu',
     group => 'sensu',
     mode  => '0644',
+    notify => Service['rabbitmq-server'],
   }
   file {'/etc/rabbitmq/ssl/key.pem':
     ensure => present,
@@ -56,5 +59,6 @@ class sensu_server::rabbitmq_server {
     owner => 'sensu',
     group => 'sensu',
     mode  => '0644',
+    notify => Service['rabbitmq-server'],
   }
 }

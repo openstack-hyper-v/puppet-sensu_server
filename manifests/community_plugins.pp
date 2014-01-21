@@ -35,12 +35,13 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class sensu_server {
-  anchor{'sensu_server::begin':} ->
-  class{'sensu_server::community_plugins':} -> 
-  class{'sensu_server::ssl':} -> 
-  class{'sensu_server::redis_server':} ->
-  class{'sensu_server::rabbitmq_server':} -> 
-  class{'sensu_server::install':} ->
-  anchor{'sensu_server::end':}
+class sensu_server::community_plugins {
+
+  vcsrepo{'/opt/sensu-community-plugins':
+    ensure   => present,
+    provider => git,
+    source   => 'https://github.com/sensu/sensu-community-plugins',
+    before   => Class['sensu_server::install'],
+#    require => File['/etc/sensu'],
+  }
 }
