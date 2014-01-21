@@ -1,4 +1,4 @@
-# == Class: sensu_server
+# == Class: sensu_server::ssl
 #
 # Full description of class sensu_server here.
 #
@@ -35,11 +35,29 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class sensu_server {
-  anchor{'sensu_server::begin':} ->
-  class{'sensu_server::ssl':} -> 
-  class{'sensu_server::redis_server':} ->
-  class{'sensu_server::rabbitmq_server':} -> 
-  class{'sensu_server::install':} ->
-  anchor{'sensu_server::end':}
+class sensu_server::ssl {
+
+
+  exec {'get-sensu-ca-scripts':
+    command => '/usr/bin/wget -cv wget http://sensuapp.org/docs/0.12/tools/ssl_certs.tar -O - | tar -x',
+    creates => '/tmp/ssl_certs',
+    cwd     => '/tmp',
+  }
+
+  file {'/tmp/ssl_certs':
+    ensure => present,
+    require => Exec['get-sensu-ca-scripts'],
+  }
+
+
+  exec {'create-sensu-certs':
+    command => '/tmp/ssl_certs/ssl_certs.sh generate',
+    cwd     => '/tmp/ssl_certs',
+    creates => ['/tmp/ssl_certs/sensu_ca/cacert.pem',
+                '/tmp/ssl_certs/server/cert.pem',
+                '/tmp/ssl_certs/server/key.pem'],
+    require => [Exec['get-sensu-ca-scripts'],File['/tmp/ssl_certs']],
+    logoutput => true,
+    unless    => '/usr/bin/file /tmp/ssl_certs/sensu_ca/cacert.pem',
+  }
 }
