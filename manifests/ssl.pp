@@ -61,6 +61,5 @@ class sensu_server::ssl {
     logoutput   => true,
     unless      => '/usr/bin/file /tmp/ssl_certs/sensu_ca/cacert.pem',
     refreshonly => true,
-    before      => Class['sensu_server::rabbitmq_server','sensu_server::install'],
   }
 }

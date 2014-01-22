@@ -37,10 +37,10 @@
 #
 class sensu_server {
   anchor{'sensu_server::begin':} ->
-  class{'sensu_server::community_plugins':} -> 
   class{'sensu_server::ssl':} -> 
   class{'sensu_server::redis_server':} ->
   class{'sensu_server::rabbitmq_server':} -> 
   class{'sensu_server::install':} ->
+  class{'sensu_server::community_plugins':} -> 
   anchor{'sensu_server::end':}
 }

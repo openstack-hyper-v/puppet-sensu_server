@@ -23,11 +23,11 @@ class sensu_server::rabbitmq_server {
     admin => true,
     password => 'sensu',
   }
-  rabbitmq_vhost{'sensu':
+  rabbitmq_vhost{'/sensu':
     ensure => present,
   }
 
-  rabbitmq_user_permissions { 'sensu@sensu':
+  rabbitmq_user_permissions { 'sensu@/sensu':
     configure_permission => '.*',
     read_permission      => '.*',
     write_permission     => '.*',
@@ -38,8 +38,8 @@ class sensu_server::rabbitmq_server {
     ensure => present,
     source => '/tmp/ssl_certs/sensu_ca/cacert.pem',
     require => [File['/etc/rabbitmq/ssl'],Exec['create-sensu-certs']],
-    owner => 'sensu',
-    group => 'sensu',
+    owner => 'root',
+    group => 'root',
     mode  => '0644',
     notify => Service['rabbitmq-server'],
   }
@@ -47,8 +47,8 @@ class sensu_server::rabbitmq_server {
     ensure => present,
     source => '/tmp/ssl_certs/server/cert.pem',
     require => [File['/etc/rabbitmq/ssl'],Exec['create-sensu-certs']],
-    owner => 'sensu',
-    group => 'sensu',
+    owner => 'root',
+    group => 'root',
     mode  => '0644',
     notify => Service['rabbitmq-server'],
   }
@@ -56,8 +56,8 @@ class sensu_server::rabbitmq_server {
     ensure => present,
     source => '/tmp/ssl_certs/server/key.pem',
     require => [File['/etc/rabbitmq/ssl'],Exec['create-sensu-certs']],
-    owner => 'sensu',
-    group => 'sensu',
+    owner => 'root',
+    group => 'root',
     mode  => '0644',
     notify => Service['rabbitmq-server'],
   }

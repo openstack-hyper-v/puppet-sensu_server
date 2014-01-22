@@ -73,7 +73,7 @@ class sensu_server::install {
 
   class{'sensu':
     rabbitmq_password        => 'sensu',
-    rabbitmq_host            => $fqdn,
+    rabbitmq_host            => $ipaddress,
     rabbitmq_ssl_cert_chain  => '/etc/sensu/ssl/cert.pem',
     rabbitmq_ssl_private_key => '/etc/sensu/ssl/key.pem',
     server                   => true,
@@ -81,9 +81,11 @@ class sensu_server::install {
     api                      => true,
     client                   => false,
 #    safe_mode => true,
-    require                  => [
-      Class['sensu_server::community_plugins'],
-      Service['rabbitmq-server','redis-server'],
-      Exec['create-sensu-certs']],
+    require                  => File['/etc/rabbitmq/ssl/cacert.pem',
+                                      '/etc/rabbitmq/ssl/cert.pem',
+                                      '/etc/rabbitmq/ssl/key.pem'],
+  }
+  sensu::handler { 'default':
+    command => 'mail -s \'sensu alert\' ppouliot@microsoft.com',
   }
 }
