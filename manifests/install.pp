@@ -79,7 +79,7 @@ class sensu_server::install {
     server                   => true,
     dashboard                => true,
     api                      => true,
-#    subscriptions            => 'linux-diskspace',
+    subscriptions            => 'production',
 #    client                   => false,
     safe_mode => true,
     require                  => File['/etc/rabbitmq/ssl/cacert.pem',
@@ -93,32 +93,38 @@ class sensu_server::install {
   sensu::check { "linux-diskspace":
     command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/system/check-disk.rb',
     standalone => false,
-    handlers => 'default',
+    subscribers => 'production',
+    handlers => ['default','irc'],
   }
   sensu::check { "windows-check-diskspace":
     command => '/etc/sensu/plugins/windows/check-disk-windows.rb',
     standalone => false,
-    handlers => 'default',
+    subscribers => 'production',
+    handlers => ['default','irc'],
   }
   sensu::check { "windows-check-service":
     command => '/etc/sensu/plugins/windows/check-service-windows.rb',
     standalone => false,
-    handlers => 'default',
+    subscribers => 'production',
+    handlers => ['default','irc'],
   }
   sensu::check { "windows-check-process":
     command => '/etc/sensu/plugins/windows/check-process.rb',
     standalone => false,
-    handlers => 'default',
+    subscribers => 'production',
+    handlers => ['default','irc'],
   }
   sensu::check { "windows-check-cpu-load":
     command => '/etc/sensu/plugins/windows/cpu-load-windows.rb',
     standalone => false,
-    handlers => 'default',
+    subscribers => 'production',
+    handlers => ['default','irc'],
   }
   sensu::check { "windows-check-ram-usage":
     command => '/etc/sensu/plugins/windows/ram-usage-windows.rb',
     standalone => false,
-    handlers => 'default',
+    subscribers => 'production',
+    handlers => ['default','irc'],
   }
 
   sensu::handler{'irc':
