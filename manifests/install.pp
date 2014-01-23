@@ -79,7 +79,7 @@ class sensu_server::install {
     server                   => true,
     dashboard                => true,
     api                      => true,
-    subscriptions            => 'linux-diskspace',
+#    subscriptions            => 'linux-diskspace',
 #    client                   => false,
     safe_mode => true,
     require                  => File['/etc/rabbitmq/ssl/cacert.pem',
