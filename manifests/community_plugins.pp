@@ -41,17 +41,16 @@ class sensu_server::community_plugins {
     ensure   => present,
     provider => git,
     source   => 'https://github.com/sensu/sensu-community-plugins',
-    owner   => 'sensu',
-    group   => 'sensu',
+    owner    => 'sensu',
+    group    => 'sensu',
   }
-  vcsrepo{'/opt/sensu-plugin':
+  vcsrepo{'/opt/monitoring-plugins':
     ensure   => present,
     provider => git,
-    source   => 'https://github.com/sensu/sensu-plugin',
-    owner   => 'sensu',
-    group   => 'sensu',
+    source   => 'https://github.com/monitoring-plugins/monitoring-plugins',
+    owner    => 'sensu',
+    group    => 'sensu',
   }
-#  file {'/etc/sensu/extensions':
 #  file {'/etc/sensu/extensions':
 #    ensure  => present,
 #    owner   => 'sensu',
@@ -60,15 +59,15 @@ class sensu_server::community_plugins {
 #    recurse => true,
 #    source  => '/opt/sensu-community-plugins/extensions',
 #  }
-#  file {'/etc/sensu/handlers/debug':
-#    ensure  => absent,
-#    owner   => 'sensu',
-#    group   => 'sensu',
-#    mode    => '0755', 
-#    recurse => true,
-#    source  => '/opt/sensu-community-plugins/handlers/debug',
-#    require => File['/etc/sensu/handlers'],
-#  }
+  file {'/etc/sensu/handlers/debug':
+    ensure  => present,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0755', 
+    recurse => true,
+    source  => '/opt/sensu-community-plugins/handlers/debug',
+    require => File['/etc/sensu/handlers'],
+  }
   file {'/etc/sensu/handlers/metrics':
     ensure  => present,
     owner   => 'sensu',

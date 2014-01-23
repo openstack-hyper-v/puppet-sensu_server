@@ -1,0 +1,10 @@
+{
+  "irc": {
+    "irc_server": "irc://<%=@irc_user%><%-if @irc_password%>:<%=@irc_password%><%-end%>@<%=@irc_server%>:<%=@irc_server_port%><%=@irc_channel%>",
+    "irc_ssl": <%=irc_ssl%>
+<%- if @nickserv_password %>
+    "nickserv_password": "<%=nickserver_password%>",
+    "nickserv_command": "PRIVMSG NickServ@<%=@nickserver_host%> :IDENTIFY password"
+<%-end%>
+  }
+}

@@ -41,6 +41,8 @@ class sensu_server {
   class{'sensu_server::redis_server':} ->
   class{'sensu_server::rabbitmq_server':} -> 
   class{'sensu_server::install':} ->
+  class{'sensu_server::checks':} ->
+  class{'sensu_server::irc_handler':} ->
   class{'sensu_server::community_plugins':} -> 
   anchor{'sensu_server::end':}
 }
