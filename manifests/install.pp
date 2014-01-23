@@ -79,8 +79,9 @@ class sensu_server::install {
     server                   => true,
     dashboard                => true,
     api                      => true,
-    client                   => false,
-#    safe_mode => true,
+    subscriptions            => 'linux-diskspace',
+#    client                   => false,
+    safe_mode => true,
     require                  => File['/etc/rabbitmq/ssl/cacert.pem',
                                       '/etc/rabbitmq/ssl/cert.pem',
                                       '/etc/rabbitmq/ssl/key.pem'],
@@ -88,4 +89,64 @@ class sensu_server::install {
   sensu::handler { 'default':
     command => 'mail -s \'sensu alert\' ppouliot@microsoft.com',
   }
+
+  sensu::check { "linux-diskspace":
+    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/system/check-disk.rb',
+    standalone => false,
+    handlers => 'default',
+  }
+  sensu::check { "windows-check-diskspace":
+    command => '/etc/sensu/plugins/windows/check-disk-windows.rb',
+    standalone => false,
+    handlers => 'default',
+  }
+  sensu::check { "windows-check-service":
+    command => '/etc/sensu/plugins/windows/check-service-windows.rb',
+    standalone => false,
+    handlers => 'default',
+  }
+  sensu::check { "windows-check-process":
+    command => '/etc/sensu/plugins/windows/check-process.rb',
+    standalone => false,
+    handlers => 'default',
+  }
+  sensu::check { "windows-check-cpu-load":
+    command => '/etc/sensu/plugins/windows/cpu-load-windows.rb',
+    standalone => false,
+    handlers => 'default',
+  }
+  sensu::check { "windows-check-ram-usage":
+    command => '/etc/sensu/plugins/windows/ram-usage-windows.rb',
+    standalone => false,
+    handlers => 'default',
+  }
+
+  sensu::handler{'irc':
+    type => 'pipe',
+    command => '/etc/sensu/handlers/notification/irc.rb',
+    require => File['/etc/sensu/irc.json'],
+  }
+
+  file {'/etc/sensu/irc.json':
+    ensure => file,
+    owner  => 'sensu',
+    group  => 'sensu',
+    mode   => '0644',
+    source => 'puppet:///modules/sensu_server/irc.json',
+  }
+  exec {'install-sensu-plugin-from-embedded-gem':
+    command   => '/opt/sensu/embedded/bin/gem install sensu-plugin',
+    unless    => '/opt/sensu/embedded/bin/gem list --local sensu-plugin|/bin/grep -q sensu-plugin',
+    logoutput => true,
+    require   => Class['sensu'],
+  }
+  exec {'install-carrier-pigeon-from-embedded-gem':
+    command   => '/opt/sensu/embedded/bin/gem install carrier-pigeon',
+    unless    => '/opt/sensu/embedded/bin/gem list --local carrier-pigeon|/bin/grep -q carrier-pigeon',
+    logoutput => true,
+    timeout   => 0,
+    require   => Class['sensu'],
+  }
+
+
 }

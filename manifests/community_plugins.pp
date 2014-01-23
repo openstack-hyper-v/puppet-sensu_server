@@ -44,6 +44,14 @@ class sensu_server::community_plugins {
     owner   => 'sensu',
     group   => 'sensu',
   }
+  vcsrepo{'/opt/sensu-plugin':
+    ensure   => present,
+    provider => git,
+    source   => 'https://github.com/sensu/sensu-plugin',
+    owner   => 'sensu',
+    group   => 'sensu',
+  }
+#  file {'/etc/sensu/extensions':
 #  file {'/etc/sensu/extensions':
 #    ensure  => present,
 #    owner   => 'sensu',
@@ -61,52 +69,52 @@ class sensu_server::community_plugins {
 #    source  => '/opt/sensu-community-plugins/handlers/debug',
 #    require => File['/etc/sensu/handlers'],
 #  }
-#  file {'/etc/sensu/handlers/metrics':
-#    ensure  => present,
-#    owner   => 'sensu',
-#    group   => 'sensu',
-#    mode    => '0755', 
-#    recurse => true,
-#    source  => '/opt/sensu-community-plugins/handlers/metrics',
-#    require => File['/etc/sensu/handlers'],
-#  }
-#  file {'/etc/sensu/handlers/notificiation':
-#    ensure  => present,
-#    owner   => 'sensu',
-#    group   => 'sensu',
-#    mode    => '0755', 
-#    recurse => true,
-#    source  => '/opt/sensu-community-plugins/handlers/notification',
-#    require => File['/etc/sensu/handlers'],
-#  }
-#  file {'/etc/sensu/handlers/other':
-#    ensure  => present,
-#    owner   => 'sensu',
-#    group   => 'sensu',
-#    mode    => '0755', 
-#    recurse => true,
-#    source  => '/opt/sensu-community-plugins/handlers/other',
-#    require => File['/etc/sensu/handlers'],
-#  }
-#  file {'/etc/sensu/handlers/remediation':
-#    ensure  => present,
-#    owner   => 'sensu',
-#    group   => 'sensu',
-#    mode    => '0755', 
-#    recurse => true,
-#    source  => '/opt/sensu-community-plugins/handlers/remediation',
-#    require => File['/etc/sensu/handlers'],
-#  }
-# 
-#  file {'/etc/sensu/mutators':
-#    ensure  => present,
-#    owner   => 'sensu',
-#    group   => 'sensu',
-#    mode    => '0755', 
-#    recurse => true,
-#    source  => '/opt/sensu-community-plugins/mutators',
-#    require => File['/etc/sensu/handlers'],
-#  }
+  file {'/etc/sensu/handlers/metrics':
+    ensure  => present,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0755', 
+    recurse => true,
+    source  => '/opt/sensu-community-plugins/handlers/metrics',
+    require => File['/etc/sensu/handlers'],
+  }
+  file {'/etc/sensu/handlers/notificiation':
+    ensure  => present,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0755', 
+    recurse => true,
+    source  => '/opt/sensu-community-plugins/handlers/notification',
+    require => File['/etc/sensu/handlers'],
+  }
+  file {'/etc/sensu/handlers/other':
+    ensure  => present,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0755', 
+    recurse => true,
+    source  => '/opt/sensu-community-plugins/handlers/other',
+    require => File['/etc/sensu/handlers'],
+  }
+  file {'/etc/sensu/handlers/remediation':
+    ensure  => present,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0755', 
+    recurse => true,
+    source  => '/opt/sensu-community-plugins/handlers/remediation',
+    require => File['/etc/sensu/handlers'],
+  }
+
+  file {'/etc/sensu/mutators':
+    ensure  => present,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0755', 
+    recurse => true,
+    source  => '/opt/sensu-community-plugins/mutators',
+    require => File['/etc/sensu/handlers'],
+  }
 
   exec {'copy-community-plugins-to-etc-sensu':
     command   => '/usr/bin/rsync -av /opt/sensu-community-plugins/plugins/ /etc/sensu/plugins/',
