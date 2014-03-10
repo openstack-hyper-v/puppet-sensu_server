@@ -36,8 +36,8 @@
 # Copyright 2014 Your name here, unless otherwise noted.
 #
 class sensu_server::checks (
-  $check_defaults = hiera('sensu_server::checks::check_defaults',{})
-  $sensu_checks   = hiera('sensu_server::checks::sensu_checks',{})
+  $check_defaults = hiera('sensu_server::checks::check_defaults',{}),
+  $sensu_checks   = hiera('sensu_server::checks::sensu_checks',{}),
 ){
 
 #  Still need to handle this better for splitting linux and windows check definitions in hiera.
