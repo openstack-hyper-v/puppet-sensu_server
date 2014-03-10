@@ -35,48 +35,15 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class sensu_server::checks {
+class sensu_server::checks (
+  $check_defaults = hiera('sensu_server::checks::check_defaults',{})
+  $sensu_checks   = hiera('sensu_server::checks::sensu_checks',{})
+){
 
-  sensu::check { "linux-diskspace":
-    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/system/check-disk.rb',
-    standalone => false,
-    subscribers => 'production',
-    handlers => ['default','irc'],
-  }
-  sensu::check { "jenkins-job-status":
-    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/jenkins/check-jenkins-job-status.rb',
-    standalone => false,
-    subscribers => 'production',
-    handlers => ['default','irc'],
-  }
-  sensu::check { "windows-check-diskspace":
-    command => '/etc/sensu/plugins/windows/check-disk-windows.rb',
-    standalone => false,
-    subscribers => 'hyper-v',
-    handlers => ['default','irc'],
-  }
-  sensu::check { "windows-check-service":
-    command => '/etc/sensu/plugins/windows/check-service-windows.rb',
-    standalone => false,
-    subscribers => 'hyper-v',
-    handlers => ['default','irc'],
-  }
-  sensu::check { "windows-check-process":
-    command => '/etc/sensu/plugins/windows/check-process.rb',
-    standalone => false,
-    subscribers => 'hyper-v',
-    handlers => ['default','irc'],
-  }
-  sensu::check { "windows-check-cpu-load":
-    command => '/etc/sensu/plugins/windows/cpu-load-windows.rb',
-    standalone => false,
-    subscribers => 'hyper-v',
-    handlers => ['default','irc'],
-  }
-  sensu::check { "windows-check-ram-usage":
-    command => '/etc/sensu/plugins/windows/ram-usage-windows.rb',
-    standalone => false,
-    subscribers => 'hyper-v',
-    handlers => ['default','irc'],
-  }
+#  Still need to handle this better for splitting linux and windows check definitions in hiera.
+  #linux checks
+  create_resources("sensu::check", $sensu_checks['linux'], $check_defaults['linux'])
+  #windows checks
+  create_resources("sensu::check", $sensu_checks['windows'], $check_defaults['windows'])
+
 }
