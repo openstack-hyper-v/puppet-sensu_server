@@ -1,0 +1,15 @@
+{
+  "mailer": {
+    "mail_from": "<%= @mail_from %>",
+    "mail_to": "<%= @mail_to %>"<% if @delivery_method %>,
+    "delivery_method": "<%= @delivery_method %>"<% end %><% if @smtp_address %>,
+    "smtp_address": "<%= @smtp_address %>"<% end %><% if @smtp_port %>,
+    "smtp_port": "<%= @smtp_port %>"<% end %><% if @smtp_domain %>,
+    "smtp_domain": "<%= @smtp_domain %>"<% end %><% if @smtp_username %>,
+    "smtp_username": "<%= @smtp_username %>"<% end %><% if @smtp_password %>,
+    "smtp_password": "<%= @smtp_password %>"<% end %><% if @smtp_auth %>,
+    "smtp_authentication": "<%= @smtp_auth %>"<% end %><% if @smtp_enable_tls %>,
+    "smtp_enable_starttls_auto": "<%= @smtp_enable_tls %>"<% end %>
+  }
+}
+
