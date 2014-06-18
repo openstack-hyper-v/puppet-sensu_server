@@ -81,12 +81,17 @@ class sensu_server::install {
     api                      => true,
     subscriptions            => 'production',
 #    client                   => false,
-    safe_mode => true,
+    safe_mode => false,
+#    safe_mode => true,
     require                  => File['/etc/rabbitmq/ssl/cacert.pem',
                                       '/etc/rabbitmq/ssl/cert.pem',
                                       '/etc/rabbitmq/ssl/key.pem'],
   }
+#  sensu::handler { 'default':
+#    command => 'mail -s \'sensu alert\' tiroger@microsoft.com',
+#    severities => ['warning', 'critical'],
+#  }
   sensu::handler { 'default':
-    command => 'mail -s \'sensu alert\' ppouliot@microsoft.com',
+    command => 'cat &> /dev/null',
   }
 }

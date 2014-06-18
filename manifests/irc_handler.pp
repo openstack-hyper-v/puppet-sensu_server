@@ -39,11 +39,12 @@ class sensu_server::irc_handler {
 
   sensu::handler{'irc':
     type => 'pipe',
-    command => '/etc/sensu/handlers/notification/irc.rb',
-    require => File['/etc/sensu/irc.json'],
+    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/community/handlers/notification/irc.rb',
+    require => File['/etc/sensu/conf.d/irc.json'],
+    severities => ['critical'],
   }
 
-  file {'/etc/sensu/irc.json':
+  file {'/etc/sensu/conf.d/irc.json':
     ensure => file,
     owner  => 'sensu',
     group  => 'sensu',
