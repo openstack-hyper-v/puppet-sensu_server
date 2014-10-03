@@ -94,4 +94,8 @@ class sensu_server::install {
   sensu::handler { 'default':
     command => 'cat &> /dev/null',
   }
+  sensu::handler{'remediator':
+    type => 'pipe',
+    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/community/handlers/remediation/sensu.rb',
+  }
 }
