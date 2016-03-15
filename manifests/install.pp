@@ -41,39 +41,33 @@ class sensu_server::install {
     ensure => latest,
   }
   file {'/etc/sensu/ssl/cacert.pem':
-    ensure => present,
-    source => '/tmp/ssl_certs/sensu_ca/cacert.pem',
-    require => [
-      File['/etc/sensu/ssl'],
-      Exec['create-sensu-certs']],
-    owner => 'sensu',
-    group => 'sensu',
-    mode  => '0644',
+    ensure  => present,
+    source  => '/tmp/ssl_certs/sensu_ca/cacert.pem',
+    require => [ File['/etc/sensu/ssl'], Exec['create-sensu-certs']],
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0644',
   }
   file {'/etc/sensu/ssl/cert.pem':
-    ensure => present,
-    source => '/tmp/ssl_certs/server/cert.pem',
-    require => [
-      File['/etc/sensu/ssl'],
-      Exec['create-sensu-certs']],
-    owner => 'sensu',
-    group => 'sensu',
-    mode  => '0644',
+    ensure  => present,
+    source  => '/tmp/ssl_certs/server/cert.pem',
+    require => [ File['/etc/sensu/ssl'], Exec['create-sensu-certs']],
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0644',
   }
   file {'/etc/sensu/ssl/key.pem':
-    ensure => present,
-    source => '/tmp/ssl_certs/server/key.pem',
-    require => [
-      File['/etc/sensu/ssl'],
-      Exec['create-sensu-certs']],
-    owner => 'sensu',
-    group => 'sensu',
-    mode  => '0644',
+    ensure  => present,
+    source  => '/tmp/ssl_certs/server/key.pem',
+    require => [ File['/etc/sensu/ssl'], Exec['create-sensu-certs']],
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0644',
   }
 
   class{'sensu':
     rabbitmq_password        => 'sensu',
-    rabbitmq_host            => $ipaddress,
+    rabbitmq_host            => $::ipaddress,
     rabbitmq_ssl_cert_chain  => '/etc/sensu/ssl/cert.pem',
     rabbitmq_ssl_private_key => '/etc/sensu/ssl/key.pem',
     server                   => true,
@@ -81,7 +75,7 @@ class sensu_server::install {
     api                      => true,
     subscriptions            => 'production',
 #    client                   => false,
-    safe_mode => false,
+    safe_mode                => false,
 #    safe_mode => true,
     require                  => File['/etc/rabbitmq/ssl/cacert.pem',
                                       '/etc/rabbitmq/ssl/cert.pem',
@@ -95,7 +89,7 @@ class sensu_server::install {
     command => 'cat &> /dev/null',
   }
   sensu::handler{'remediator':
-    type => 'pipe',
+    type    => 'pipe',
     command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/community/handlers/remediation/sensu.rb',
   }
 }

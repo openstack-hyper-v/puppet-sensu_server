@@ -10,8 +10,8 @@ class sensu_server::rabbitmq_server {
 
   class {'rabbitmq':
     delete_guest_user => true,
-    default_user => '',
-    default_pass => '',
+    default_user      => '',
+    default_pass      => '',
     ssl               => true,
     ssl_cacert        => '/etc/rabbitmq/ssl/cacert.pem',
     ssl_cert          => '/etc/rabbitmq/ssl/cert.pem',
@@ -20,7 +20,7 @@ class sensu_server::rabbitmq_server {
   }
 
   rabbitmq_user{'sensu':
-    admin => true,
+    admin    => true,
     password => 'sensu',
   }
   rabbitmq_vhost{'/sensu':
@@ -35,30 +35,30 @@ class sensu_server::rabbitmq_server {
 
 
   file {'/etc/rabbitmq/ssl/cacert.pem':
-    ensure => present,
-    source => '/tmp/ssl_certs/sensu_ca/cacert.pem',
+    ensure  => present,
+    source  => '/tmp/ssl_certs/sensu_ca/cacert.pem',
     require => [File['/etc/rabbitmq/ssl'],Exec['create-sensu-certs']],
-    owner => 'root',
-    group => 'root',
-    mode  => '0644',
-    notify => Service['rabbitmq-server'],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    notify  => Service['rabbitmq-server'],
   }
   file {'/etc/rabbitmq/ssl/cert.pem':
-    ensure => present,
-    source => '/tmp/ssl_certs/server/cert.pem',
+    ensure  => present,
+    source  => '/tmp/ssl_certs/server/cert.pem',
     require => [File['/etc/rabbitmq/ssl'],Exec['create-sensu-certs']],
-    owner => 'root',
-    group => 'root',
-    mode  => '0644',
-    notify => Service['rabbitmq-server'],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    notify  => Service['rabbitmq-server'],
   }
   file {'/etc/rabbitmq/ssl/key.pem':
-    ensure => present,
-    source => '/tmp/ssl_certs/server/key.pem',
+    ensure  => present,
+    source  => '/tmp/ssl_certs/server/key.pem',
     require => [File['/etc/rabbitmq/ssl'],Exec['create-sensu-certs']],
-    owner => 'root',
-    group => 'root',
-    mode  => '0644',
-    notify => Service['rabbitmq-server'],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    notify  => Service['rabbitmq-server'],
   }
 }

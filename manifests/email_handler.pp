@@ -36,32 +36,32 @@
 # Copyright 2014 Your name here, unless otherwise noted.
 #
 class sensu_server::email_handler (
-  $mail_from        = 'sensu@example.com',
-  $mail_to          = 'monitor@example.com',
-  $delivery_method  = 'smtp',
-  $smtp_address     = 'localhost',
-  $smtp_port        = 25,
-  $smtp_domain      = 'localhost.localdomain',
-  $smtp_username    = undef,
-  $smtp_password    = undef,
-  $smtp_auth        = undef,
-  $smtp_enable_tls  = undef,
+  $mail_from       = 'sensu@example.com',
+  $mail_to         = 'monitor@example.com',
+  $delivery_method = 'smtp',
+  $smtp_address    = 'localhost',
+  $smtp_port       = 25,
+  $smtp_domain     = 'localhost.localdomain',
+  $smtp_username   = undef,
+  $smtp_password   = undef,
+  $smtp_auth       = undef,
+  $smtp_enable_tls = undef,
 ){
 
   sensu::handler{'mailer':
-    type => 'pipe',
+    type    => 'pipe',
     command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/community/handlers/notification/mailer.rb',
 #    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/handlers/notification/mailer.rb',
     require => File['/etc/sensu/conf.d/mailer-conf.json'],
   }
 
   file {'/etc/sensu/conf.d/mailer-conf.json':
-    ensure => file,
-    owner  => 'sensu',
-    group  => 'sensu',
-    mode   => '0644',
+    ensure  => file,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0644',
     content => template('sensu_server/mailer.json.erb'),
-    require   => Class['sensu_server::install'],
+    require => Class['sensu_server::install'],
   }
 
   exec {'install-embedded-mail-gem':

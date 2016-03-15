@@ -37,21 +37,17 @@
 #
 #
 class sensu_server::ssl {
-
-
   exec {'get-sensu-ca-scripts':
     command => '/usr/bin/wget -cv wget http://sensuapp.org/docs/0.12/tools/ssl_certs.tar -O - | tar -x',
     creates => '/tmp/ssl_certs',
     cwd     => '/tmp',
-    notify => Exec['create-sensu-certs'],
+    notify  => Exec['create-sensu-certs'],
   }
 
   file {'/tmp/ssl_certs':
-    ensure => present,
+    ensure  => present,
     require => Exec['get-sensu-ca-scripts'],
   }
-
-
   exec {'create-sensu-certs':
     command     => '/tmp/ssl_certs/ssl_certs.sh generate',
     cwd         => '/tmp/ssl_certs',

@@ -1,3 +1,4 @@
+# == Class sensu_server::client
 class sensu_server::client {
 #file {'/etc/sensu/ssl/cacert.pem':
 #    ensure  => present,
@@ -23,7 +24,7 @@ class sensu_server::client {
 #    group   => 'sensu',
 #    mode    => '0644',
 #  }
-
+class sensu_server::client {
   class{'sensu':
 #    rabbitmq_password        => $sensu_client::rabbitmq_password,
 #    rabbitmq_host            => "${sensu::rabbitmq_host}",

@@ -37,9 +37,9 @@
 #
 class sensu_server {
   anchor{'sensu_server::begin':} ->
-  class{'sensu_server::ssl':} -> 
+  class{'sensu_server::ssl':} ->
   class{'sensu_server::redis_server':} ->
-  class{'sensu_server::rabbitmq_server':} -> 
+  class{'sensu_server::rabbitmq_server':} ->
   class{'sensu_server::install':} ->
   class{'sensu_server::checks':} ->
   class{'sensu_server::irc_handler':} ->

@@ -38,19 +38,19 @@
 class sensu_server::irc_handler {
 
   sensu::handler{'irc':
-    type => 'pipe',
-    command => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/community/handlers/notification/irc.rb',
-    require => File['/etc/sensu/conf.d/irc.json'],
+    type       => 'pipe',
+    command    => '/opt/sensu/embedded/bin/ruby /etc/sensu/plugins/community/handlers/notification/irc.rb',
+    require    => File['/etc/sensu/conf.d/irc.json'],
     severities => ['critical'],
   }
 
   file {'/etc/sensu/conf.d/irc.json':
-    ensure => file,
-    owner  => 'sensu',
-    group  => 'sensu',
-    mode   => '0644',
-    source => 'puppet:///modules/sensu_server/irc.json',
-    require   => Class['sensu_server::install'],
+    ensure  => file,
+    owner   => 'sensu',
+    group   => 'sensu',
+    mode    => '0644',
+    source  => 'puppet:///modules/sensu_server/irc.json',
+    require => Class['sensu_server::install'],
   }
   exec {'install-sensu-plugin-from-embedded-gem':
     command   => '/opt/sensu/embedded/bin/gem install sensu-plugin',

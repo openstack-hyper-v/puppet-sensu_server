@@ -1,3 +1,4 @@
+# == Class: sensu_server::params
 class sensu_server::params {
   $irc_user            = undef,
   $irc_password        = undef,
